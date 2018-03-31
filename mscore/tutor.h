@@ -22,6 +22,7 @@
 
 #include <thread>
 #include <mutex>
+#include <string>
 
 typedef struct {
   int velo;
@@ -32,6 +33,7 @@ typedef struct {
 
 // Arduino-assisted NeoPixel-based PianoTutor helper class
 class Tutor {
+      std::string serialDevice;
       int tutorSerial;		// serial port file descriptor
       tnote notes[256];		// addressed by pitch, .velo = -1 means unused
       std::mutex mtx;
@@ -62,6 +64,8 @@ class Tutor {
       double getCoeff() const { return coeff; }
       int* getColor(int idx) {  return colors[idx];  }
       void setColor(int idx, int r, int g, int b);
+      void setSerialDevice(const std::string & s);
+      std::string getSerialDevice() const;
 
       void addKey(int pitch, int velo, int channel, int future = 0);
       void clearKey(int pitch, bool mark = false);

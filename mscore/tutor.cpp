@@ -26,17 +26,18 @@
 #include <time.h>
 #include <assert.h>
 
-static const char *TUTOR_SERIAL_DEVICE="/dev/ttyACM0";
-static const char *TUTOR_SERIAL_DEVICE2="/dev/ttyACM1";
+static const char *DEFAULT_SERIAL_DEVICE="/dev/ttyACM0";
 
 int def_colors[2][3] = {
   { 16, 0, 16},
   { 0, 16, 16}
 };
 
-Tutor::Tutor() : tutorSerial(-1), num_curr_events(0),
+Tutor::Tutor() : serialDevice(DEFAULT_SERIAL_DEVICE),
+                 tutorSerial(-1), num_curr_events(0),
 		 c4light(71), coeff(-2.0),
-		 needs_flush(false) {
+		 needs_flush(false)
+{
   // mark all notes as unused
   for (int i = 0; i < 256; i++) {
     notes[i].velo = -1;
@@ -49,10 +50,7 @@ bool Tutor::checkSerial() {
   if (tutorSerial > 0)
     return true;
   if (tutorSerial < 0) {
-    tutorSerial = open(TUTOR_SERIAL_DEVICE, O_RDWR | O_NOCTTY);
-    if (tutorSerial < 0) {
-      tutorSerial = open(TUTOR_SERIAL_DEVICE2, O_RDWR | O_NOCTTY);
-    }
+    tutorSerial = open(DEFAULT_SERIAL_DEVICE, O_RDWR | O_NOCTTY);
     if (tutorSerial > 0) {
       termios tio;
       if (tcgetattr(tutorSerial, &tio) < 0) {
@@ -321,4 +319,15 @@ int Tutor::keyPressed(int pitch, int velo) {
 size_t Tutor::size() {
   std::lock_guard<std::mutex> lock(mtx);
   return num_curr_events;
+}
+
+void Tutor::setSerialDevice(const std::string & s) {
+  if (tutorSerial != -1)
+    close(tutorSerial);
+  tutorSerial = -1;
+  serialDevice = s;
+}
+
+std::string Tutor::getSerialDevice() const {
+  return serialDevice;
 }

@@ -67,7 +67,7 @@ class PianoTutorPanel : public QDockWidget, private Ui::PianoTutorPanelBase {
       bool tutorWait() { return tutorWaitCB->isChecked(); }
       bool tutorLookAhead() { return tutorLookAheadCB->isChecked(); }
       void midiNoteReceived(int ch, int pitch, int velo);
-      };
+   };
 
 } // namespace Ms
 #endif

@@ -62,6 +62,7 @@ PianoTutorPanel::PianoTutorPanel(QWidget* parent)
       connect(lightsPerMeter, SIGNAL(editTextChanged(const QString &)), this, SLOT(onParamsChanged()));
       connect(midCLight, SIGNAL(textChanged(const QString &)), this, SLOT(onParamsChanged()));
       connect(backwardLayout, SIGNAL(stateChanged(int)), this, SLOT(onParamsChanged()));
+      connect(serialDevice, SIGNAL(editTextChanged(const QString &)), this, SLOT(onParamsChanged()));
       connect(leftHandColor, SIGNAL(clicked()), this, SLOT(onLeftHandColClicked()));
       connect(rightHandColor, SIGNAL(clicked()), this, SLOT(onRightHandColClicked()));
       connect(tutorWizard, SIGNAL(clicked()), this, SLOT(onWizardClicked()));
@@ -122,6 +123,8 @@ void PianoTutorPanel::showConfig() {
 
   leftHandColor->setStyleSheet(QString::fromStdString(std::string("background-color:#") + col2hex(tutor_.getColor(1))));
   rightHandColor->setStyleSheet(QString::fromStdString(std::string("background-color:#") + col2hex(tutor_.getColor(0))));
+
+  serialDevice->setCurrentText(QString::fromStdString(tutor_.getSerialDevice()));
 }
 
 //---------------------------------------------------------
@@ -159,6 +162,7 @@ void PianoTutorPanel::onParamsChanged()
 	double lpm = lightsPerMeter->currentText().toDouble();
 	tutor_.setC4Light(midCLight->text().toInt());
 	tutor_.setCoeff(lpm * (backwardLayout->isChecked() ? -1 : 1));
+	tutor_.setSerialDevice(serialDevice->currentText().toStdString());
       }
 
 void PianoTutorPanel::onLeftHandColClicked()
