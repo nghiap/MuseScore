@@ -40,8 +40,8 @@ static const char *DEFAULT_SERIAL_DEVICE="/dev/ttyACM0";
 #endif
 
 int def_colors[2][3] = {
-  { 16, 0, 16},
-  { 0, 16, 16}
+  { 60, 60, 60},
+  { 60, 60, 60}
 };
 
 /* Cross-OS Win32 / Linux functions - BEGIN */
@@ -92,7 +92,7 @@ ssize_t READ(int fd, void *buf, size_t count) {
 
 Tutor::Tutor() : serialDevice(DEFAULT_SERIAL_DEVICE),
                  tutorSerial(INVALID_SERIAL), num_curr_events(0),
-		 c4light(71), coeff(-2.0),
+		 c4light(58), coeff(-1.0),
 		 needs_flush(false)
 {
   // mark all notes as unused
